@@ -1,66 +1,35 @@
-import connection from "../database/connection.js"
+import SelectionRepository from "../repositories/SelectionRepository.js"
 
 class SelectionController {
 
-    index(req, res) {
-        const query = "SELECT * FROM movies;"
-        connection.query(query,(error, result) => {
-            if(error) {
-                res.status(404).json({error: 'Data not located.'})
-            } else {
-                res.status(200).json(result)
-            }
-        })
+    async index(req, res) {
+        const row = await SelectionRepository.findAll()
+        res.json(row)
     }
 
-    show(req, res) {
+    async show(req, res) {
         const id = req.params.id
-        const query = "SELECT * FROM movies WHERE id = ?;"
-        connection.query(query, id, (error, result) => {
-            const line = result[0]
-            if(error) {
-                res.status(404).json({error: 'Data not located.'})
-            } else {
-                res.status(200).json(line)
-            }
-        })
+        const row = await SelectionRepository.findById(id)
+        res.json(row)
     }
 
-    store(req, res) {
+    async store(req, res) {
         const selection = req.body
-        const query = "INSERT INTO movies SET ?;"
-        connection.query(query, selection, (error, result) => {
-            if(error) {
-                res.status(400).json({error: 'Bad Request.'})
-            } else {
-                res.status(201).json(result)
-            }
-        })
+        const row = await SelectionRepository.create(selection)
+        res.json(row)
     }
 
-    update(req, res) {
+    async update(req, res) {
         const id = req.params.id
         const selection = req.body
-        const query = "UPDATE movies SET ? WHERE id = ?;"
-        connection.query(query, [selection, id], (error, result) => {
-            if(error) {
-                res.status(404).json({error: 'Data not located.'})
-            } else {
-                res.status(201).json(result)
-            }
-        })
+        const row = await SelectionRepository.update(selection, id)
+        res.json(row)
     }
 
-    delete(req, res) {
+    async delete(req, res) {
         const id = req.params.id
-        const query = "DELETE FROM movies WHERE id = ?;"
-        connection.query(query, id, (error, result) => {
-            if(error) {
-                res.status(404).json({error: 'Data not located.'})
-            } else {
-                res.status(201).json(result)
-            }
-        })
+        const row = await SelectionRepository.delete(id)
+        res.json(row)
     }
 
 }
