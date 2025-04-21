@@ -1,14 +1,10 @@
 import express from 'express'
-import SelectionController from './app/controllers/SelectionController.js'
+import routes from './routes.js'
 
 const app = express()
 
-app.use(express.json())
+app.use(routes)
 
-app.get('/movies', SelectionController.index)
-app.get('/movies/:id', SelectionController.show)
-app.post('/movies', SelectionController.store)
-app.delete('/movies/:id', SelectionController.delete)
-app.put('/movies/:id', SelectionController.update)
+app.use(express.json())
 
 export default app
